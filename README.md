@@ -3,17 +3,21 @@
 Math::Homogeneous - Perform homogeneous product
 
 # SYNOPSIS
-Function
+
+## Function
+  
+
     use Math::Homogeneous;
 
     my @n = qw/ a b c /;
-    my $homogeneous = homogeneous(2, @n);
-
-    for (@$h) {
+    my $homo = homogeneous(2, @n);
+    for (@$homo) {
       print join(',', @$_) . "\n";
     }
 
-output:
+### Output
+    
+
     a,a
     a,b
     a,c
@@ -24,17 +28,19 @@ output:
     c,b
     c,c
 
-Iterator
+## Iterator
+
     use Math::Homogeneous;
 
     my @n = qw/ a b c /;
-    my $homo = Math::Homogeneous->new(2, @n);
+    my $itr = Math::Homogeneous->new(2, @n);
     
-    while (<$homo>) {
+    while (<$itr>) {
       print join(',', @$_) . "\n";
     }
 
-output:
+### Output
+
     a,a
     a,b
     a,c

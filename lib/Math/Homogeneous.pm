@@ -5,10 +5,10 @@ use warnings;
 use base 'Exporter';
 use Clone qw/ clone /;
 use overload
-    '<>' => \&get,
-    fallback => 1;
+  '<>' => \&_get,
+  fallback => 1;
 
-our $VERSION = "0.02";
+our $VERSION = '0.03';
 
 our @EXPORT = qw/ homogeneous /;
 our @EXPORT_OK = qw/ homo /;
@@ -31,7 +31,7 @@ sub homogeneous {
   $return;
 }
 
-sub homo { &homogeneous(@_); }
+sub homo { homogeneous @_ }
 
 sub new {
   my $class = shift;
@@ -44,20 +44,20 @@ sub new {
   bless($iterator, $class);
 }
 
-sub next {
+sub _next {
   my $self = shift;
-  return undef unless $self->has_next;
+  return undef unless $self->_has_next;
   $self->{iteratee}[$self->{current}++];
 }
 
-sub has_next {
+sub _has_next {
   my $self = shift;
   $self->{current} < $self->{length};
 }
 
-sub get {
+sub _get {
   my $self = shift;
-  wantarray ? @{$self->{iteratee}} : $self->next;
+  wantarray ? @{$self->{iteratee}} : $self->_next;
 }
 
 1;
@@ -70,47 +70,51 @@ __END__
 Math::Homogeneous - Perform homogeneous product
 
 =head1 SYNOPSIS
-Function
-    use Math::Homogeneous;
 
-    my @n = qw/ a b c /;
-    my $homogeneous = homogeneous(2, @n);
+=head2 Function
+  
+  use Math::Homogeneous;
 
-    for (@$h) {
-      print join(',', @$_) . "\n";
-    }
+  my @n = qw/ a b c /;
+  my $homo = homogeneous(2, @n);
+  for (@$homo) {
+    print join(',', @$_) . "\n";
+  }
 
-output:
-    a,a
-    a,b
-    a,c
-    b,a
-    b,b
-    b,c
-    c,a
-    c,b
-    c,c
-
-Iterator
-    use Math::Homogeneous;
-
-    my @n = qw/ a b c /;
-    my $homo = Math::Homogeneous->new(2, @n);
+=head3 Output
     
-    while (<$homo>) {
-      print join(',', @$_) . "\n";
-    }
+  a,a
+  a,b
+  a,c
+  b,a
+  b,b
+  b,c
+  c,a
+  c,b
+  c,c
 
-output:
-    a,a
-    a,b
-    a,c
-    b,a
-    b,b
-    b,c
-    c,a
-    c,b
-    c,c
+=head2 Iterator
+
+  use Math::Homogeneous;
+
+  my @n = qw/ a b c /;
+  my $itr = Math::Homogeneous->new(2, @n);
+  
+  while (<$itr>) {
+    print join(',', @$_) . "\n";
+  }
+
+=head3 Output
+
+  a,a
+  a,b
+  a,c
+  b,a
+  b,b
+  b,c
+  c,a
+  c,b
+  c,c
 
 =head1 DESCRIPTION
 
